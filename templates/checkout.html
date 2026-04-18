@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="page-header">
+    <h1>📦 Checkout</h1>
+  </div>
+  <div class="checkout-layout">
+    <!-- ORDER FORM -->
+    <div class="checkout-form-side">
+      <form method="POST" class="checkout-form">
+
+        <div class="form-section">
+          <h3>🚚 Delivery Details</h3>
+          <div class="form-group">
+            <label>Delivery Address *</label>
+            <textarea name="address" rows="3" required class="form-input"
+              placeholder="House No, Street, Area, City">{{ user['address'] or '' }}</textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Delivery Date *</label>
+              <input type="date" name="delivery_date" required class="form-input" id="delivery-date"/>
+            </div>
+            <div class="form-group">
+              <label>Preferred Time *</label>
+              <select name="delivery_time" required class="form-input">
+                <option value="">Select time slot</option>
+                <option value="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</option>
+                <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                <option value="12:00 PM - 02:00 PM">12:00 PM - 02:00 PM</option>
+                <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                <option value="06:00 PM - 08:00 PM">06:00 PM - 08:00 PM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>💳 Payment Method</h3>
+          <div class="payment-options">
+            <label class="payment-option active" id="cod-label">
+              <input type="radio" name="payment_method" value="Cash on Delivery" checked onchange="selectPayment(this)"/>
+              <span class="pay-icon">💵</span>
+              <span>Cash on Delivery</span>
+            </label>
+            <label class="payment-option" id="upi-label">
+              <input type="radio" name="payment_method" value="UPI (Coming Soon)" onchange="selectPayment(this)"/>
+              <span class="pay-icon">📱</span>
+              <span>UPI <em>(Coming Soon)</em></span>
+            </label>
+            <label class="payment-option" id="card-label">
+              <input type="radio" name="payment_method" value="Card (Coming Soon)" onchange="selectPayment(this)"/>
+              <span class="pay-icon">💳</span>
+              <span>Card <em>(Coming Soon)</em></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>📝 Notes (Optional)</h3>
+          <textarea name="notes" rows="2" class="form-input" placeholder="Any special instructions..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary btn-lg btn-block">Place Order ✅</button>
+      </form>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="checkout-summary-side">
+      <div class="checkout-summary-card">
+        <h3>Order Summary</h3>
+        {% for item in cart %}
+        <div class="co-item">
+          <span>{% if item.product['category'] == 'cold' %}🧊{% else %}🫧{% endif %} {{ item.product['name'] }} × {{ item.quantity }}</span>
+          <span>₹{{ item.item_total|int }}</span>
+        </div>
+        {% endfor %}
+        <hr class="co-divider"/>
+        <div class="co-item co-total"><span>Total</span><strong>₹{{ total|int }}</strong></div>
+        <div class="co-note">🚚 Free delivery on all orders</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Set min date to today
+document.getElementById('delivery-date').min = new Date().toISOString().split('T')[0];
+
+function selectPayment(radio) {
+  document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('active'));
+  radio.closest('.payment-option').classList.add('active');
+}
+</script>
+{% endblock %}

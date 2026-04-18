@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My Orders — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="page-header">
+    <h1>📋 My Orders</h1>
+    <p>Track your water delivery history</p>
+  </div>
+
+  {% if orders %}
+  <div class="orders-list">
+    {% for order in orders %}
+    <div class="order-card">
+      <div class="order-card-header">
+        <div>
+          <span class="order-id">#{{ order['id'] }}</span>
+          <span class="order-date">{{ order['created_at'][:10] }}</span>
+        </div>
+        <span class="status-badge status-{{ order['status']|lower|replace(' ', '-') }}">
+          {% if order['status'] == 'Delivered' %}✅
+          {% elif order['status'] == 'Out for Delivery' %}🚚
+          {% elif order['status'] == 'Accepted' %}✔️
+          {% elif order['status'] == 'Cancelled' %}❌
+          {% else %}⏳{% endif %}
+          {{ order['status'] }}
+        </span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-items-summary">
+          💧 {{ order['items_summary'] or 'Items not available' }}
+        </div>
+        <div class="order-meta">
+          <span>📅 {{ order['delivery_date'] }}</span>
+          <span>🕐 {{ order['delivery_time'] }}</span>
+          <span>💳 {{ order['payment_method'] }}</span>
+        </div>
+      </div>
+      <div class="order-card-footer">
+        <strong class="order-total">₹{{ order['total_price']|int }}</strong>
+        <a href="{{ url_for('order_detail', order_id=order['id']) }}" class="btn-outline-sm">View Details</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h2>No orders yet</h2>
+    <p>Place your first water order!</p>
+    <a href="{{ url_for('products') }}" class="btn-primary">Order Now</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

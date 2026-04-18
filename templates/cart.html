@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Cart — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="page-header">
+    <h1>🛒 Your Cart</h1>
+  </div>
+
+  {% if cart %}
+  <div class="cart-layout">
+    <div class="cart-items">
+      {% for item in cart %}
+      <div class="cart-item">
+        <div class="cart-item-icon">
+          {% if item.product['category'] == 'cold' %}🧊{% else %}🫧{% endif %}
+        </div>
+        <div class="cart-item-info">
+          <h3>{{ item.product['name'] }}</h3>
+          <span class="cart-item-price">₹{{ item.product['price']|int }} / bottle</span>
+        </div>
+        <div class="cart-item-controls">
+          <form method="POST" action="{{ url_for('update_cart') }}" style="display:flex;align-items:center;gap:8px;">
+            <input type="hidden" name="product_id" value="{{ item.product['id'] }}"/>
+            <button type="button" class="qty-btn" onclick="changeQty(this, -1)">−</button>
+            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="50"
+                   class="cart-qty-input" onchange="this.form.submit()"/>
+            <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            <button type="submit" class="btn-update">Update</button>
+          </form>
+        </div>
+        <div class="cart-item-total">₹{{ item.item_total|int }}</div>
+        <a href="{{ url_for('remove_from_cart', product_id=item.product['id']) }}" class="cart-remove">✕</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Subtotal</span><span>₹{{ total|int }}</span></div>
+      <div class="summary-row"><span>Delivery</span><span class="green">FREE</span></div>
+      <div class="summary-row summary-total"><span>Total</span><span>₹{{ total|int }}</span></div>
+      <a href="{{ url_for('checkout') }}" class="btn-primary btn-block">Proceed to Checkout →</a>
+      <a href="{{ url_for('products') }}" class="btn-outline btn-block" style="margin-top:10px;">+ Add More Items</a>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🛒</div>
+    <h2>Your cart is empty</h2>
+    <p>Add some water bottles to get started!</p>
+    <a href="{{ url_for('products') }}" class="btn-primary">Browse Products</a>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+function changeQty(btn, delta) {
+  const input = btn.parentElement.querySelector('input[name="quantity"]');
+  const newVal = Math.max(0, parseInt(input.value || 0) + delta);
+  input.value = newVal;
+  btn.closest('form').submit();
+}
+</script>
+{% endblock %}

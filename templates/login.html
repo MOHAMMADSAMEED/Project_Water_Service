@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Login — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon">💧</div>
+      <h2>Welcome Back</h2>
+      <p>Login to your account</p>
+    </div>
+    <form method="POST" class="auth-form">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="your@email.com" required class="form-input"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-with-icon">
+          <input type="password" name="password" id="pwd" placeholder="••••••••" required class="form-input"/>
+          <span class="toggle-pwd" onclick="togglePwd()">👁</span>
+        </div>
+      </div>
+      <button type="submit" class="btn-auth">Login →</button>
+    </form>
+    <p class="auth-switch">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+    <div class="auth-demo">
+      <p>Demo credentials:</p>
+      <code>Admin: admin@mullawater.com / admin123</code><br>
+      <code>Owner: owner@mullawater.com / owner123</code>
+    </div>
+  </div>
+</div>
+<script>
+function togglePwd() {
+  const p = document.getElementById('pwd');
+  p.type = p.type === 'password' ? 'text' : 'password';
+}
+</script>
+{% endblock %}

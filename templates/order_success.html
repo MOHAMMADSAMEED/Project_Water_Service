@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Order Placed! — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h1>Order Placed Successfully!</h1>
+    <p class="success-order-id">Order #{{ order_id }}</p>
+    <p class="success-msg">Your water is on its way! We'll notify you when it's dispatched.</p>
+
+    <div class="whatsapp-section">
+      <p>📲 Notify the owner via WhatsApp:</p>
+      <a href="https://wa.me/{{ wa_phone }}?text={{ wa_msg|urlencode }}"
+         target="_blank" class="btn-whatsapp">
+        💬 Send WhatsApp to Owner
+      </a>
+    </div>
+
+    <div class="success-actions">
+      <a href="{{ url_for('my_orders') }}" class="btn-primary">View My Orders</a>
+      <a href="{{ url_for('index') }}" class="btn-outline">Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

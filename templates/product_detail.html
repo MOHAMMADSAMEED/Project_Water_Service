@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ product['name'] }} — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <a href="{{ url_for('products') }}" class="back-link">← Back to Products</a>
+  <div class="detail-card">
+    <div class="detail-img-side">
+      {% if product['category'] == 'cold' %}
+        <div class="detail-emoji">🧊</div>
+        <div class="detail-badge cold-badge">COLD WATER</div>
+      {% else %}
+        <div class="detail-emoji">🫧</div>
+        <div class="detail-badge normal-badge">NORMAL WATER</div>
+      {% endif %}
+      <div class="detail-price-tag">₹{{ product['price']|int }}</div>
+      <div class="detail-price-label">per bottle</div>
+    </div>
+    <div class="detail-info-side">
+      <h1>{{ product['name'] }}</h1>
+      <p class="detail-desc">{{ product['description'] }}</p>
+      <table class="detail-table">
+        <tr><td>Category</td><td><strong>{{ product['category']|capitalize }} Water</strong></td></tr>
+        <tr><td>Price</td><td><strong>₹{{ product['price']|int }} / bottle</strong></td></tr>
+        <tr><td>Volume</td><td><strong>20 Litres per bottle</strong></td></tr>
+        <tr><td>Filtration</td><td><strong>Multi-Stage RO + UV</strong></td></tr>
+        <tr><td>TDS Level</td><td><strong>{% if product['category'] == 'cold' %}Below 50 ppm (chilled){% else %}Below 150 ppm{% endif %}</strong></td></tr>
+        <tr><td>Delivery</td><td><strong>Same day / Next day</strong></td></tr>
+      </table>
+      {% if session.get('role') == 'customer' %}
+      <form method="POST" action="{{ url_for('add_to_cart') }}" class="detail-order-form">
+        <input type="hidden" name="product_id" value="{{ product['id'] }}"/>
+        <div class="form-group">
+          <label>Number of Bottles</label>
+          <input type="number" name="quantity" value="1" min="1" max="50" class="form-input qty-wide"/>
+        </div>
+        <button type="submit" class="btn-primary btn-lg">Add to Cart 🛒</button>
+      </form>
+      {% elif not session.get('user_id') %}
+      <div class="login-cta">
+        <p>Login to place an order</p>
+        <a href="{{ url_for('login') }}" class="btn-primary">Login / Register</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

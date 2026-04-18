@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order['id'] }} — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <a href="{{ url_for('my_orders') }}" class="back-link">← Back to Orders</a>
+  <div class="order-detail-card">
+    <div class="order-detail-header">
+      <div>
+        <h1>Order #{{ order['id'] }}</h1>
+        <span class="order-date">Placed on {{ order['created_at'][:16] }}</span>
+      </div>
+      <span class="status-badge status-{{ order['status']|lower|replace(' ', '-') }} status-lg">
+        {{ order['status'] }}
+      </span>
+    </div>
+
+    <div class="order-detail-grid">
+      <!-- Items -->
+      <div class="detail-section">
+        <h3>📦 Order Items</h3>
+        {% for item in items %}
+        <div class="detail-item">
+          <span class="item-emoji">{% if item['category'] == 'cold' %}🧊{% else %}🫧{% endif %}</span>
+          <span class="item-name">{{ item['name'] }}</span>
+          <span class="item-qty">× {{ item['quantity'] }}</span>
+          <span class="item-price">₹{{ (item['unit_price'] * item['quantity'])|int }}</span>
+        </div>
+        {% endfor %}
+        <div class="detail-total">
+          <span>Total</span><strong>₹{{ order['total_price']|int }}</strong>
+        </div>
+      </div>
+
+      <!-- Delivery Info -->
+      <div class="detail-section">
+        <h3>🚚 Delivery Info</h3>
+        <table class="detail-info-table">
+          <tr><td>Date</td><td>{{ order['delivery_date'] }}</td></tr>
+          <tr><td>Time</td><td>{{ order['delivery_time'] }}</td></tr>
+          <tr><td>Address</td><td>{{ order['address'] }}</td></tr>
+          <tr><td>Payment</td><td>{{ order['payment_method'] }}</td></tr>
+          {% if order['notes'] %}<tr><td>Notes</td><td>{{ order['notes'] }}</td></tr>{% endif %}
+        </table>
+      </div>
+
+      <!-- Customer Info (visible to owner/admin) -->
+      {% if session.get('role') in ['owner', 'admin'] %}
+      <div class="detail-section">
+        <h3>👤 Customer Info</h3>
+        <table class="detail-info-table">
+          <tr><td>Name</td><td>{{ user['name'] }}</td></tr>
+          <tr><td>Email</td><td>{{ user['email'] }}</td></tr>
+          {% if user['phone'] %}<tr><td>Phone</td><td>{{ user['phone'] }}</td></tr>{% endif %}
+        </table>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Status Progress -->
+    <div class="status-progress">
+      {% set statuses = ['Pending', 'Accepted', 'Out for Delivery', 'Delivered'] %}
+      {% for s in statuses %}
+        {% set is_done = (statuses.index(s) <= statuses.index(order['status'])) if order['status'] in statuses else false %}
+        <div class="progress-step {{ 'done' if is_done else '' }}">
+          <div class="progress-dot"></div>
+          <span>{{ s }}</span>
+        </div>
+        {% if not loop.last %}<div class="progress-line {{ 'done' if is_done else '' }}"></div>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

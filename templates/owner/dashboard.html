@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Owner Dashboard — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="panel-header">
+    <h1>📋 Owner Dashboard</h1>
+    <span class="panel-badge owner-badge">OWNER</span>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card warn"><div class="stat-val">{{ stats.pending }}</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat-card blue"><div class="stat-val">{{ stats.accepted }}</div><div class="stat-lbl">Accepted</div></div>
+    <div class="stat-card orange"><div class="stat-val">{{ stats.out_for_delivery }}</div><div class="stat-lbl">Out for Delivery</div></div>
+    <div class="stat-card green"><div class="stat-val">{{ stats.delivered_today }}</div><div class="stat-lbl">Delivered Today</div></div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="panel-section">
+    <h2>🚚 Incoming Orders</h2>
+    <div class="owner-orders-list">
+      {% for order in orders %}
+      <div class="owner-order-card {{ 'urgent' if order['status'] == 'Pending' else '' }}">
+        <div class="owner-order-top">
+          <div>
+            <span class="order-id">#{{ order['id'] }}</span>
+            <span class="order-customer">{{ order['customer_name'] }}</span>
+            {% if order['customer_phone'] %}
+            <a href="tel:{{ order['customer_phone'] }}" class="phone-link">📞 {{ order['customer_phone'] }}</a>
+            {% endif %}
+          </div>
+          <span class="status-badge status-{{ order['status']|lower|replace(' ', '-') }}">{{ order['status'] }}</span>
+        </div>
+        <div class="owner-order-details">
+          <div>💧 {{ order['items_summary'] or '—' }}</div>
+          <div>📅 {{ order['delivery_date'] }} | 🕐 {{ order['delivery_time'] }}</div>
+          <div>📍 {{ order['address'] }}</div>
+          <div>💰 ₹{{ order['total_price']|int }} | {{ order['payment_method'] }}</div>
+        </div>
+
+        <!-- WhatsApp button -->
+        <div class="owner-order-actions">
+          <form method="POST" action="{{ url_for('update_order_status') }}" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="hidden" name="order_id" value="{{ order['id'] }}"/>
+            <select name="status" class="form-input form-input-sm">
+              <option value="Pending" {{ 'selected' if order['status']=='Pending' }}>Pending</option>
+              <option value="Accepted" {{ 'selected' if order['status']=='Accepted' }}>Accepted</option>
+              <option value="Out for Delivery" {{ 'selected' if order['status']=='Out for Delivery' }}>Out for Delivery</option>
+              <option value="Delivered" {{ 'selected' if order['status']=='Delivered' }}>Delivered</option>
+              <option value="Cancelled" {{ 'selected' if order['status']=='Cancelled' }}>Cancelled</option>
+            </select>
+            <button type="submit" class="btn-primary">Update Status</button>
+          </form>
+          <a href="{{ url_for('order_detail', order_id=order['id']) }}" class="btn-outline-sm">Full Details</a>
+        </div>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🎉</div>
+        <h2>No orders yet!</h2>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

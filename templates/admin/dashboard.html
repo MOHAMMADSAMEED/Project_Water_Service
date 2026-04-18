@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="panel-header">
+    <h1>⚙️ Admin Dashboard</h1>
+    <span class="panel-badge admin-badge">ADMIN</span>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val">{{ stats.total_users }}</div><div class="stat-lbl">Total Customers</div></div>
+    <div class="stat-card"><div class="stat-val">{{ stats.total_orders }}</div><div class="stat-lbl">Total Orders</div></div>
+    <div class="stat-card warn"><div class="stat-val">{{ stats.pending_orders }}</div><div class="stat-lbl">Pending Orders</div></div>
+    <div class="stat-card green"><div class="stat-val">₹{{ stats.total_revenue|int }}</div><div class="stat-lbl">Revenue (Delivered)</div></div>
+  </div>
+
+  <!-- ADD OWNER -->
+  <div class="panel-section">
+    <h2>➕ Add New Owner</h2>
+    <form method="POST" action="{{ url_for('admin_add_owner') }}" class="inline-form">
+      <input type="text" name="name" placeholder="Name" required class="form-input form-input-sm"/>
+      <input type="email" name="email" placeholder="Email" required class="form-input form-input-sm"/>
+      <input type="password" name="password" placeholder="Password" required class="form-input form-input-sm"/>
+      <input type="tel" name="phone" placeholder="Phone" class="form-input form-input-sm"/>
+      <button type="submit" class="btn-primary">Add Owner</button>
+    </form>
+  </div>
+
+  <!-- OWNERS -->
+  <div class="panel-section">
+    <h2>🏪 Owners ({{ owners|length }})</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for o in owners %}
+          <tr>
+            <td>#{{ o['id'] }}</td>
+            <td>{{ o['name'] }}</td>
+            <td>{{ o['email'] }}</td>
+            <td>{{ o['phone'] or '—' }}</td>
+            <td><a href="{{ url_for('admin_delete_user', user_id=o['id']) }}"
+                   onclick="return confirm('Remove this owner?')" class="btn-danger-sm">Remove</a></td>
+          </tr>
+          {% else %}<tr><td colspan="5" class="empty-row">No owners yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RECENT ORDERS -->
+  <div class="panel-section">
+    <h2>📋 Recent Orders</h2>
+    <a href="{{ url_for('admin_orders') }}" class="btn-outline-sm" style="float:right;margin-top:-36px;">View All →</a>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for o in recent_orders %}
+          <tr>
+            <td>#{{ o['id'] }}</td>
+            <td>{{ o['customer_name'] }}</td>
+            <td>{{ o['delivery_date'] }}</td>
+            <td>₹{{ o['total_price']|int }}</td>
+            <td><span class="status-badge status-{{ o['status']|lower|replace(' ', '-') }}">{{ o['status'] }}</span></td>
+            <td><a href="{{ url_for('order_detail', order_id=o['id']) }}" class="btn-outline-sm">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div class="panel-section">
+    <h2>👥 Customers ({{ users|length }})</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for u in users %}
+          <tr>
+            <td>#{{ u['id'] }}</td>
+            <td>{{ u['name'] }}</td>
+            <td>{{ u['email'] }}</td>
+            <td>{{ u['phone'] or '—' }}</td>
+            <td>{{ u['created_at'][:10] }}</td>
+            <td><a href="{{ url_for('admin_delete_user', user_id=u['id']) }}"
+                   onclick="return confirm('Delete customer?')" class="btn-danger-sm">Delete</a></td>
+          </tr>
+          {% else %}<tr><td colspan="6" class="empty-row">No customers yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

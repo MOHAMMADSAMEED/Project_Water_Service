@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Products — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="page-header">
+    <h1>Our Water Products</h1>
+    <p>Fresh, purified water in two varieties</p>
+  </div>
+  <div class="products-grid products-grid-lg">
+    {% for product in products %}
+    <div class="product-card product-card-lg">
+      <div class="product-img-wrap-lg">
+        {% if product['category'] == 'cold' %}
+          <div class="product-emoji-xl">🧊</div>
+          <div class="product-badge cold-badge">COLD WATER</div>
+        {% else %}
+          <div class="product-emoji-xl">🫧</div>
+          <div class="product-badge normal-badge">NORMAL WATER</div>
+        {% endif %}
+      </div>
+      <div class="product-info">
+        <h2>{{ product['name'] }}</h2>
+        <p class="product-desc-lg">{{ product['description'] }}</p>
+        <div class="product-specs">
+          <div class="spec"><span>Category</span><strong>{{ product['category']|capitalize }} Water</strong></div>
+          <div class="spec"><span>Volume</span><strong>20 Litres / bottle</strong></div>
+          <div class="spec"><span>Filtration</span><strong>Multi-Stage RO</strong></div>
+        </div>
+        <div class="product-price-big">₹{{ product['price']|int }} <span>per bottle</span></div>
+        <div class="product-actions-lg">
+          <a href="{{ url_for('product_detail', product_id=product['id']) }}" class="btn-outline">View Details</a>
+          {% if session.get('role') == 'customer' %}
+          <form method="POST" action="{{ url_for('add_to_cart') }}" style="display:flex;gap:8px;align-items:center;">
+            <input type="hidden" name="product_id" value="{{ product['id'] }}"/>
+            <input type="number" name="quantity" value="1" min="1" max="50" class="qty-input-lg"/>
+            <button type="submit" class="btn-primary">Add to Cart 🛒</button>
+          </form>
+          {% elif not session.get('user_id') %}
+          <a href="{{ url_for('login') }}" class="btn-primary">Login to Order</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

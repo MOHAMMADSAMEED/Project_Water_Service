@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Register — Mulla Water Filter{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card auth-card-wide">
+    <div class="auth-header">
+      <div class="auth-icon">🌙</div>
+      <h2>Create Account</h2>
+      <p>Join Mulla Water Filter today</p>
+    </div>
+    <form method="POST" class="auth-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" name="name" placeholder="Your full name" required class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="+91 98765 43210" class="form-input"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" name="email" placeholder="your@email.com" required class="form-input"/>
+      </div>
+      <div class="form-group">
+        <label>Password * (min 6 characters)</label>
+        <input type="password" name="password" placeholder="••••••••" required minlength="6" class="form-input"/>
+      </div>
+      <div class="form-group">
+        <label>Delivery Address</label>
+        <textarea name="address" placeholder="Your home/office address for deliveries..." rows="3" class="form-input"></textarea>
+      </div>
+      <button type="submit" class="btn-auth">Create Account →</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+  </div>
+</div>
+{% endblock %}

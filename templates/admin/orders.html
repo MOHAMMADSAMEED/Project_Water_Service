@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}All Orders — Admin{% endblock %}
+{% block content %}
+<div class="container page-container">
+  <div class="panel-header">
+    <h1>📋 All Orders</h1>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn-outline-sm">← Dashboard</a>
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Customer</th><th>Phone</th>
+          <th>Items Total</th><th>Delivery Date</th><th>Status</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td>#{{ o['id'] }}</td>
+          <td>{{ o['customer_name'] }}</td>
+          <td>{{ o['customer_phone'] or '—' }}</td>
+          <td>₹{{ o['total_price']|int }}</td>
+          <td>{{ o['delivery_date'] }}</td>
+          <td><span class="status-badge status-{{ o['status']|lower|replace(' ', '-') }}">{{ o['status'] }}</span></td>
+          <td><a href="{{ url_for('order_detail', order_id=o['id']) }}" class="btn-outline-sm">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty-row">No orders yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
