@@ -1,40 +1,385 @@
-{% extends "base.html" %}
-{% block title %}Mulla Water Filter — Pure & Blessed Water Delivery{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mulla Water Filter — Pure Water Delivery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-dark:  #0a4a2e;
+      --green-main:  #0d6b42;
+      --green-mid:   #1a8c57;
+      --green-light: #27ae60;
+      --green-pale:  #e8f5ee;
+      --green-pale2: #d4edda;
+      --gold:        #c9a227;
+      --gold-light:  #f0d06a;
+      --white:       #ffffff;
+      --off-white:   #f7faf8;
+      --text-dark:   #1a2e25;
+      --text-mid:    #3d5c4a;
+      --text-muted:  #7a9b87;
+      --border:      #c8e0d2;
+      --shadow-sm:   0 2px 8px rgba(10,74,46,0.10);
+      --shadow-md:   0 6px 24px rgba(10,74,46,0.15);
+      --shadow-lg:   0 16px 48px rgba(10,74,46,0.18);
+      --radius:      12px;
+      --radius-lg:   20px;
+      --transition:  all 0.25s ease;
+    }
 
-<!-- HERO SECTION -->
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; background: var(--off-white); color: var(--text-dark); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      position: sticky; top: 0; z-index: 1000;
+      border-bottom: 3px solid var(--green-pale);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { font-size: 2rem; }
+    .brand-name    { font-size: 1.2rem; font-weight: 800; color: var(--green-dark); display: block; line-height: 1.2; }
+    .brand-tagline { font-size: 0.68rem; color: var(--green-mid); font-weight: 700; display: block; letter-spacing: 1.5px; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { padding: 8px 14px; border-radius: 8px; color: var(--text-mid); font-weight: 600; font-size: 0.92rem; transition: var(--transition); display: block; }
+    .nav-links a:hover { background: var(--green-pale); color: var(--green-dark); }
+    .btn-nav { background: var(--green-main) !important; color: var(--white) !important; border-radius: 8px !important; }
+    .btn-nav:hover { background: var(--green-dark) !important; }
+    .hamburger { display: none; background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--green-dark); padding: 4px 8px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-main) 58%, var(--green-mid) 100%);
+      min-height: 560px; display: flex; align-items: center;
+      padding: 70px 5%; position: relative; overflow: hidden; gap: 60px;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%),
+        radial-gradient(circle at 10% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .hero-content { flex: 1; color: var(--white); position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.92); padding: 6px 18px; border-radius: 100px;
+      font-size: 0.82rem; font-weight: 700; margin-bottom: 22px;
+    }
+    .hero-title { font-size: clamp(2.2rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.1; margin-bottom: 18px; }
+    .hero-title .accent { color: var(--gold-light); }
+    .hero-subtitle { font-size: 1.08rem; color: rgba(255,255,255,0.8); max-width: 430px; margin-bottom: 36px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+
+    .btn-hero-primary {
+      background: var(--white); color: var(--green-dark);
+      padding: 14px 32px; border-radius: 10px; font-weight: 800; font-size: 1rem;
+      border: none; cursor: pointer; transition: var(--transition); display: inline-block;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15); font-family: inherit;
+    }
+    .btn-hero-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-hero-outline {
+      background: transparent; color: var(--white);
+      padding: 13px 28px; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+      border: 2px solid rgba(255,255,255,0.5); transition: var(--transition); display: inline-block; cursor: pointer;
+    }
+    .btn-hero-outline:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.8); }
+
+    .hero-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .stat { display: flex; flex-direction: column; }
+    .stat strong { font-size: 1.45rem; font-weight: 800; color: var(--gold-light); line-height: 1.1; }
+    .stat span   { font-size: 0.75rem; color: rgba(255,255,255,0.65); }
+    .stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.22); margin: 0 14px; }
+
+    .hero-visual { flex: 0 0 290px; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .water-drops { display: flex; gap: 10px; font-size: 2.2rem; margin-bottom: 4px; }
+    .drop { animation: dropFloat 2.2s ease-in-out infinite; }
+    .drop:nth-child(2) { animation-delay: 0.35s; }
+    .drop:nth-child(3) { animation-delay: 0.7s; }
+    @keyframes dropFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-13px); } }
+
+    .bottle-card {
+      background: rgba(255,255,255,0.14); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.22); border-radius: 16px;
+      padding: 16px 22px; display: flex; align-items: center; gap: 14px;
+      color: var(--white); width: 230px; transition: var(--transition);
+    }
+    .bottle-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
+    .bottle-card:last-child { margin-left: 28px; }
+    .bottle-emoji { font-size: 2.6rem; }
+    .bottle-info span    { font-size: 0.82rem; opacity: 0.75; display: block; }
+    .bottle-info strong  { font-size: 1.2rem; font-weight: 800; }
+
+    /* ── Sections ── */
+    .section { padding: 72px 0; }
+    .section-white { background: var(--white); }
+    .section-dark  { background: var(--green-dark); }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 5%; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-title       { font-size: 2rem; font-weight: 800; color: var(--green-dark); margin-bottom: 8px; }
+    .section-title-light { color: var(--white); }
+    .section-sub         { color: var(--text-muted); font-size: 1rem; }
+    .section-sub-light   { color: rgba(255,255,255,0.6); font-size: 1rem; }
+
+    /* ── Products ── */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 28px; }
+    .product-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm); overflow: hidden;
+      border: 1.5px solid var(--border); transition: var(--transition);
+    }
+    .product-card:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); border-color: var(--green-light); }
+    .product-img-wrap { background: var(--green-pale); padding: 36px 24px 28px; text-align: center; position: relative; }
+    .product-emoji { font-size: 5.5rem; display: block; filter: drop-shadow(0 6px 12px rgba(10,74,46,0.2)); }
+    .product-badge { position: absolute; top: 14px; right: 14px; padding: 4px 13px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1.2px; }
+    .badge-cold   { background: #cce5ff; color: #003f7f; }
+    .badge-normal { background: var(--green-pale2); color: var(--green-dark); }
+    .product-info { padding: 22px 24px 26px; }
+    .product-info h3 { font-size: 1.3rem; font-weight: 800; color: var(--green-dark); margin-bottom: 7px; }
+    .product-desc  { color: var(--text-muted); font-size: 0.9rem; line-height: 1.55; margin-bottom: 18px; }
+    .product-price { font-size: 1.7rem; font-weight: 800; color: var(--green-main); margin-bottom: 16px; }
+    .product-price span { font-size: 0.88rem; color: var(--text-muted); font-weight: 400; }
+    .product-specs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .spec-pill { background: var(--green-pale); color: var(--green-dark); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 100px; }
+    .product-cta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: var(--green-main); color: var(--white);
+      padding: 11px 24px; border-radius: 10px; font-weight: 700; font-size: 0.92rem;
+      border: none; cursor: pointer; transition: var(--transition); display: inline-block; font-family: inherit;
+    }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--green-main);
+      padding: 10px 22px; border-radius: 10px; font-weight: 700; font-size: 0.92rem;
+      border: 2px solid var(--green-main); cursor: pointer; transition: var(--transition); display: inline-block;
+    }
+    .btn-outline:hover { background: var(--green-pale); }
+    .btn-whatsapp {
+      background: #25D366; color: #fff;
+      padding: 13px 26px; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+      border: none; cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+    }
+    .btn-whatsapp:hover { background: #128C7E; transform: translateY(-1px); }
+
+    /* ── Features ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px; }
+    .feature-card { text-align: center; padding: 40px 24px; border-right: 1px solid rgba(255,255,255,0.1); }
+    .feature-card:last-child { border-right: none; }
+    .feature-icon { font-size: 2.8rem; display: block; margin-bottom: 16px; }
+    .feature-card h4 { color: var(--white); font-size: 1.05rem; font-weight: 700; margin-bottom: 7px; }
+    .feature-card p  { color: rgba(255,255,255,0.6); font-size: 0.87rem; }
+
+    /* ── Pricing ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+    .price-card { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition); border: 2px solid var(--border); }
+    .price-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--green-main); }
+    .price-card-header { padding: 32px 28px 24px; text-align: center; }
+    .cold-bg   { background: linear-gradient(135deg, #0a3a6e, #1565c0); }
+    .normal-bg { background: linear-gradient(135deg, var(--green-dark), var(--green-main)); }
+    .price-card-emoji { font-size: 4rem; display: block; margin-bottom: 12px; }
+    .price-card-header h3 { color: var(--white); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .price-tag { font-size: 3.2rem; font-weight: 800; color: var(--white); line-height: 1; }
+    .price-tag span { font-size: 1rem; font-weight: 400; opacity: 0.75; }
+    .price-card-body { background: var(--white); padding: 24px 28px 28px; }
+    .price-feature { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--off-white); font-size: 0.9rem; color: var(--text-mid); }
+    .price-feature:last-of-type { border-bottom: none; margin-bottom: 20px; }
+    .check { color: var(--green-main); font-weight: 800; }
+
+    /* ── How It Works ── */
+    .steps-grid { display: flex; align-items: flex-start; justify-content: center; }
+    .step-card { text-align: center; padding: 0 28px; max-width: 240px; }
+    .step-icon-wrap {
+      width: 76px; height: 76px; background: var(--green-pale); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; font-size: 2.2rem;
+      border: 3px solid var(--green-pale2); transition: var(--transition);
+    }
+    .step-card:hover .step-icon-wrap { background: var(--green-main); border-color: var(--green-main); transform: scale(1.08); }
+    .step-num  { font-size: 0.7rem; font-weight: 800; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .step-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); margin-bottom: 7px; }
+    .step-card p  { font-size: 0.87rem; color: var(--text-muted); line-height: 1.55; }
+    .step-connector { color: var(--border); font-size: 1.8rem; padding-top: 38px; flex-shrink: 0; }
+
+    /* ── Testimonials ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .testi-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); border: 1.5px solid var(--border); transition: var(--transition); }
+    .testi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .testi-stars  { color: var(--gold); font-size: 1rem; margin-bottom: 12px; letter-spacing: 2px; }
+    .testi-text   { color: var(--text-mid); font-size: 0.92rem; line-height: 1.65; margin-bottom: 18px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green-main); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .testi-name { font-weight: 700; font-size: 0.9rem; color: var(--green-dark); }
+    .testi-loc  { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── CTA ── */
+    .cta-section { background: linear-gradient(135deg, var(--green-dark), #0f7a4c); padding: 80px 5%; text-align: center; position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 70%); }
+    .cta-section h2 { font-size: 2.2rem; font-weight: 800; color: var(--white); margin-bottom: 12px; position: relative; }
+    .cta-section p  { color: rgba(255,255,255,0.72); font-size: 1.08rem; margin-bottom: 36px; position: relative; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    /* ── Contact ── */
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 820px; margin: 0 auto; }
+    .contact-card { background: var(--green-pale); border-radius: var(--radius-lg); padding: 32px 22px; text-align: center; transition: var(--transition); border: 1.5px solid var(--border); }
+    .contact-card:hover { background: var(--green-pale2); transform: translateY(-4px); }
+    .contact-card-icon { font-size: 2.4rem; display: block; margin-bottom: 12px; }
+    .contact-card h4   { color: var(--green-dark); font-weight: 700; margin-bottom: 6px; font-size: 0.95rem; }
+    .contact-card span, .contact-card a { color: var(--green-main); font-weight: 600; font-size: 0.9rem; }
+
+    /* ── Order Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(5,20,12,0.72); z-index: 5000;
+      align-items: center; justify-content: center;
+      padding: 20px; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 36px 32px; max-width: 500px; width: 100%;
+      box-shadow: var(--shadow-lg); position: relative;
+      animation: modalIn 0.28s ease; max-height: 92vh; overflow-y: auto;
+    }
+    @keyframes modalIn { from { transform: scale(0.92) translateY(16px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    .modal-close { position: absolute; top: 16px; right: 18px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); background: none; border: none; line-height: 1; transition: var(--transition); }
+    .modal-close:hover { color: var(--text-dark); }
+    .modal h2    { font-size: 1.5rem; font-weight: 800; color: var(--green-dark); margin-bottom: 4px; }
+    .modal-sub   { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px; }
+    .modal-product-row { display: flex; align-items: center; gap: 14px; background: var(--green-pale); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+    .modal-product-emoji { font-size: 2.5rem; }
+    .modal-product-info h4   { font-weight: 700; color: var(--green-dark); }
+    .modal-product-info span { font-size: 0.85rem; color: var(--text-muted); }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.84rem; font-weight: 700; color: var(--text-mid); margin-bottom: 5px; }
+    .form-input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; font-family: inherit; transition: var(--transition); color: var(--text-dark); background: var(--white); }
+    .form-input:focus { outline: none; border-color: var(--green-main); box-shadow: 0 0 0 3px rgba(13,107,66,0.1); }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .order-total-row { display: flex; justify-content: space-between; align-items: center; background: var(--off-white); border-radius: 10px; padding: 12px 16px; margin: 18px 0; }
+    .order-total-row span   { color: var(--text-muted); font-weight: 600; }
+    .order-total-row strong { font-size: 1.4rem; font-weight: 800; color: var(--green-main); }
+    .btn-submit { width: 100%; padding: 14px; background: var(--green-main); color: var(--white); border: none; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: var(--transition); font-family: inherit; }
+    .btn-submit:hover { background: var(--green-dark); }
+
+    /* ── Toast ── */
+    .toast { display: none; position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--green-dark); color: var(--white); padding: 15px 28px; border-radius: 100px; font-weight: 700; font-size: 0.95rem; z-index: 9999; box-shadow: var(--shadow-lg); transition: all 0.35s ease; white-space: nowrap; }
+    .toast.show { display: block; transform: translateX(-50%) translateY(0); }
+
+    /* ── Footer ── */
+    .footer { background: var(--green-dark); padding: 56px 5% 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; max-width: 1160px; margin: 0 auto; padding-bottom: 36px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .footer-logo-icon { font-size: 2rem; }
+    .footer-logo-name { font-size: 1.2rem; font-weight: 800; color: var(--white); }
+    .footer-tagline   { color: rgba(255,255,255,0.6); font-size: 0.88rem; line-height: 1.65; max-width: 300px; }
+    .footer-col h4 { color: var(--white); font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links li a { color: rgba(255,255,255,0.58); font-size: 0.88rem; transition: var(--transition); }
+    .footer-links li a:hover { color: var(--gold-light); }
+    .footer-contact-list { display: flex; flex-direction: column; gap: 10px; }
+    .footer-contact-item { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.58); font-size: 0.88rem; }
+    .footer-bottom { max-width: 1160px; margin: 24px auto 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .footer-copy { color: rgba(255,255,255,0.32); font-size: 0.78rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero { flex-direction: column; text-align: center; padding: 52px 5%; gap: 40px; }
+      .hero-subtitle { margin: 0 auto 32px; }
+      .hero-actions  { justify-content: center; }
+      .hero-stats    { justify-content: center; }
+      .hero-visual   { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+      .bottle-card:last-child { margin-left: 0; }
+      .steps-grid { flex-direction: column; align-items: center; gap: 8px; }
+      .step-connector { transform: rotate(90deg); padding: 0; }
+      .feature-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-brand-col { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--white); padding: 14px; box-shadow: var(--shadow-md); z-index: 999; gap: 2px; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: block; }
+      .pricing-grid, .testimonials-grid { grid-template-columns: 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-brand-col { grid-column: auto; }
+      .cta-section h2 { font-size: 1.8rem; }
+      .modal { padding: 28px 18px; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#" class="brand">
+    <div class="brand-icon">💧</div>
+    <div>
+      <span class="brand-name">Mulla Water Filter</span>
+      <span class="brand-tagline">Pure &amp; Fresh Water</span>
+    </div>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#" class="btn-nav" onclick="openModal('cold'); return false;">Order Now 🛒</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-pattern"></div>
   <div class="hero-content">
-    <div class="hero-badge">🌙 Trusted Water Delivery</div>
-    <h1 class="hero-title">Pure Water,<br><span class="accent">Delivered Fresh</span></h1>
-    <p class="hero-subtitle">Cold &amp; Normal purified water delivered to your doorstep. Clean, healthy, and blessed.</p>
+    <div class="hero-badge">
+      <span>✅</span> Trusted Water Delivery — Belagavi
+    </div>
+    <h1 class="hero-title">
+      Pure Water,<br>
+      <span class="accent">Delivered Fresh</span>
+    </h1>
+    <p class="hero-subtitle">
+      Cold &amp; Normal purified water delivered straight to your doorstep.
+      Clean, healthy, and affordable for every family.
+    </p>
     <div class="hero-actions">
-      <a href="{{ url_for('products') }}" class="btn-primary">Order Now 🚿</a>
-      <a href="#how-it-works" class="btn-outline">How It Works</a>
+      <button class="btn-hero-primary" onclick="openModal('cold')">Order Now 🛒</button>
+      <a href="#how-it-works" class="btn-hero-outline">How It Works</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><strong>500+</strong><span>Happy Customers</span></div>
       <div class="stat-divider"></div>
-      <div class="stat"><strong>5000+</strong><span>Bottles Delivered</span></div>
+      <div class="stat"><strong>5,000+</strong><span>Bottles Delivered</span></div>
       <div class="stat-divider"></div>
       <div class="stat"><strong>100%</strong><span>Pure Water</span></div>
     </div>
   </div>
   <div class="hero-visual">
-    <div class="water-drop-anim">
-      <div class="drop drop-1">💧</div>
-      <div class="drop drop-2">💧</div>
-      <div class="drop drop-3">💧</div>
+    <div class="water-drops">
+      <span class="drop">💧</span>
+      <span class="drop">💧</span>
+      <span class="drop">💧</span>
     </div>
-    <div class="hero-bottle-card">
+    <div class="bottle-card">
       <div class="bottle-emoji">🧊</div>
       <div class="bottle-info">
         <span>Cold Water</span>
         <strong>₹30 / bottle</strong>
       </div>
     </div>
-    <div class="hero-bottle-card hero-bottle-card-2">
+    <div class="bottle-card">
       <div class="bottle-emoji">🫧</div>
       <div class="bottle-info">
         <span>Normal Water</span>
@@ -44,106 +389,458 @@
   </div>
 </section>
 
-<!-- PRODUCTS SECTION -->
-<section class="section products-section" id="products">
+<!-- PRODUCTS -->
+<section class="section section-white" id="products">
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Our Products</h2>
-      <p class="section-sub">Choose from our purified water options</p>
+      <p class="section-sub">Fresh purified water — two varieties, one promise of quality</p>
     </div>
     <div class="products-grid">
-      {% for product in products %}
+
       <div class="product-card">
         <div class="product-img-wrap">
-          {% if product['category'] == 'cold' %}
-            <div class="product-emoji-big">🧊</div>
-            <div class="product-badge cold-badge">COLD</div>
-          {% else %}
-            <div class="product-emoji-big">🫧</div>
-            <div class="product-badge normal-badge">NORMAL</div>
-          {% endif %}
+          <span class="product-emoji">🧊</span>
+          <div class="product-badge badge-cold">COLD WATER</div>
         </div>
         <div class="product-info">
-          <h3>{{ product['name'] }}</h3>
-          <p class="product-desc">{{ product['description'] }}</p>
-          <div class="product-price">₹{{ product['price']|int }} <span>/ bottle</span></div>
-          <div class="product-actions">
-            <a href="{{ url_for('product_detail', product_id=product['id']) }}" class="btn-outline-sm">Details</a>
-            {% if session.get('role') == 'customer' %}
-            <form method="POST" action="{{ url_for('add_to_cart') }}" class="quick-add-form">
-              <input type="hidden" name="product_id" value="{{ product['id'] }}"/>
-              <input type="number" name="quantity" value="1" min="1" max="50" class="qty-input"/>
-              <button type="submit" class="btn-primary-sm">Add 🛒</button>
-            </form>
-            {% elif not session.get('user_id') %}
-            <a href="{{ url_for('login') }}" class="btn-primary-sm">Login to Order</a>
-            {% endif %}
+          <h3>Cold Water</h3>
+          <p class="product-desc">Chilled purified water stored at optimal temperature. Refreshing and clean — perfect for hot days and summer heat.</p>
+          <div class="product-specs">
+            <span class="spec-pill">🌡 Chilled</span>
+            <span class="spec-pill">20 Litres</span>
+            <span class="spec-pill">RO + UV</span>
+          </div>
+          <div class="product-price">₹30 <span>/ bottle</span></div>
+          <div class="product-cta">
+            <button class="btn-primary" onclick="openModal('cold')">Order Now 🛒</button>
+            <a href="#pricing" class="btn-outline">See Pricing</a>
           </div>
         </div>
       </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<section class="section how-section" id="how-it-works">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">How It Works</h2>
-      <p class="section-sub">Order in 3 simple steps</p>
-    </div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-icon">🛒</div>
-        <h3>Choose & Add to Cart</h3>
-        <p>Select Cold or Normal water and set your quantity</p>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <span class="product-emoji">🫧</span>
+          <div class="product-badge badge-normal">NORMAL WATER</div>
+        </div>
+        <div class="product-info">
+          <h3>Normal Water</h3>
+          <p class="product-desc">Pure multi-stage filtered water. Safe and healthy for daily drinking, cooking, and all your family's hydration needs.</p>
+          <div class="product-specs">
+            <span class="spec-pill">🌊 Purified</span>
+            <span class="spec-pill">20 Litres</span>
+            <span class="spec-pill">Multi-Stage</span>
+          </div>
+          <div class="product-price">₹20 <span>/ bottle</span></div>
+          <div class="product-cta">
+            <button class="btn-primary" onclick="openModal('normal')">Order Now 🛒</button>
+            <a href="#pricing" class="btn-outline">See Pricing</a>
+          </div>
+        </div>
       </div>
-      <div class="step-arrow">→</div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-icon">📅</div>
-        <h3>Schedule Delivery</h3>
-        <p>Pick your preferred delivery date and time</p>
-      </div>
-      <div class="step-arrow">→</div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-icon">🚚</div>
-        <h3>Receive at Door</h3>
-        <p>We deliver fresh water right to your doorstep</p>
-      </div>
+
     </div>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="section features-section">
+<section class="section section-dark">
   <div class="container">
+    <div class="section-header">
+      <h2 class="section-title section-title-light">Why Choose Mulla Water?</h2>
+      <p class="section-sub-light">Trusted by hundreds of families across Belagavi</p>
+    </div>
     <div class="features-grid">
       <div class="feature-card">
         <span class="feature-icon">✅</span>
         <h4>100% Purified</h4>
-        <p>Multi-stage filtration process</p>
+        <p>Multi-stage RO + UV filtration for the cleanest water</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">⚡</span>
         <h4>Same Day Delivery</h4>
-        <p>Book before 12 PM</p>
+        <p>Order before 12 PM and get delivery the same day</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">💰</span>
-        <h4>Affordable Prices</h4>
-        <p>Starting from ₹20/bottle</p>
+        <h4>Best Prices</h4>
+        <p>Starting from just ₹20 per 20-litre bottle</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">📱</span>
-        <h4>Track Your Order</h4>
-        <p>Real-time status updates</p>
+        <h4>WhatsApp Orders</h4>
+        <p>Order via WhatsApp in seconds — no app needed</p>
       </div>
     </div>
   </div>
 </section>
 
-{% endblock %}
+<!-- PRICING -->
+<section class="section section-white" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Simple Pricing</h2>
+      <p class="section-sub">No hidden charges — just clean, affordable water</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <div class="price-card-header cold-bg">
+          <span class="price-card-emoji">🧊</span>
+          <h3>Cold Water</h3>
+          <div class="price-tag">₹30 <span>/ bottle</span></div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-feature"><span class="check">✓</span> 20 Litre bottle</div>
+          <div class="price-feature"><span class="check">✓</span> Chilled &amp; refreshing</div>
+          <div class="price-feature"><span class="check">✓</span> RO + UV purified</div>
+          <div class="price-feature"><span class="check">✓</span> Free home delivery</div>
+          <div class="price-feature"><span class="check">✓</span> Cash on delivery</div>
+          <button class="btn-primary" style="width:100%;margin-top:4px;" onclick="openModal('cold')">Order Cold Water</button>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-card-header normal-bg">
+          <span class="price-card-emoji">🫧</span>
+          <h3>Normal Water</h3>
+          <div class="price-tag">₹20 <span>/ bottle</span></div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-feature"><span class="check">✓</span> 20 Litre bottle</div>
+          <div class="price-feature"><span class="check">✓</span> Room temperature</div>
+          <div class="price-feature"><span class="check">✓</span> Multi-stage filtered</div>
+          <div class="price-feature"><span class="check">✓</span> Free home delivery</div>
+          <div class="price-feature"><span class="check">✓</span> Cash on delivery</div>
+          <button class="btn-primary" style="width:100%;margin-top:4px;" onclick="openModal('normal')">Order Normal Water</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Get fresh water delivered in 3 simple steps</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">Step 01</div>
+        <div class="step-icon-wrap">🛒</div>
+        <h3>Choose Your Water</h3>
+        <p>Select Cold or Normal water and the number of bottles you need</p>
+      </div>
+      <div class="step-connector">→</div>
+      <div class="step-card">
+        <div class="step-num">Step 02</div>
+        <div class="step-icon-wrap">📅</div>
+        <h3>Schedule Delivery</h3>
+        <p>Pick your preferred delivery date and a convenient time slot</p>
+      </div>
+      <div class="step-connector">→</div>
+      <div class="step-card">
+        <div class="step-num">Step 03</div>
+        <div class="step-icon-wrap">🚚</div>
+        <h3>Receive at Door</h3>
+        <p>We deliver fresh water right to your doorstep — pay cash on delivery</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section section-white">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-sub">Trusted by families across Belagavi</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Excellent water quality and always on time. My family has been using Mulla Water for 6 months now. Highly recommended!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨</div>
+          <div>
+            <div class="testi-name">Irfan Shaikh</div>
+            <div class="testi-loc">Camp Area, Belagavi</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The cold water is perfect in summer. Very affordable prices and the owner is always responsive and professional."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div>
+            <div class="testi-name">Sunita Patil</div>
+            <div class="testi-loc">Tilakwadi, Belagavi</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Pure water at an honest price. Delivery is always on schedule. Best water delivery service in Belagavi!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨</div>
+          <div>
+            <div class="testi-name">Raju Desai</div>
+            <div class="testi-loc">Shivaji Nagar, Belagavi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready for Fresh Water Delivery?</h2>
+  <p>Place your order now — delivery available 7 days a week, 8 AM to 8 PM</p>
+  <div class="cta-actions">
+    <button class="btn-hero-primary" onclick="openModal('cold')">🛒 Order Online</button>
+    <a href="https://wa.me/919876543210?text=Hi%2C%20I%20want%20to%20order%20water%20from%20Mulla%20Water%20Filter"
+       target="_blank" class="btn-whatsapp">💬 Order via WhatsApp</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="section section-white" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-sub">We're just a call or WhatsApp message away</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <span class="contact-card-icon">📞</span>
+        <h4>Phone</h4>
+        <a href="tel:+919876543210">+91 98765 43210</a>
+      </div>
+      <div class="contact-card">
+        <span class="contact-card-icon">💬</span>
+        <h4>WhatsApp</h4>
+        <a href="https://wa.me/919876543210" target="_blank">Chat with us</a>
+      </div>
+      <div class="contact-card">
+        <span class="contact-card-icon">🕐</span>
+        <h4>Working Hours</h4>
+        <span>8 AM – 8 PM, Daily</span>
+      </div>
+      <div class="contact-card">
+        <span class="contact-card-icon">📍</span>
+        <h4>Location</h4>
+        <span>Belagavi, Karnataka</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <span class="footer-logo-icon">💧</span>
+        <span class="footer-logo-name">Mulla Water Filter</span>
+      </div>
+      <p class="footer-tagline">Delivering pure, clean, and healthy water to families across Belagavi. Trusted quality at honest prices — every single day.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact-list">
+        <div class="footer-contact-item"><span>📞</span><span>+91 98765 43210</span></div>
+        <div class="footer-contact-item"><span>💬</span><a href="https://wa.me/919876543210" target="_blank" style="color:rgba(255,255,255,0.58)">WhatsApp Us</a></div>
+        <div class="footer-contact-item"><span>📍</span><span>Belagavi, Karnataka</span></div>
+        <div class="footer-contact-item"><span>🕐</span><span>8 AM – 8 PM Daily</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Mulla Water Filter. All rights reserved.</span>
+    <span class="footer-copy">Made with 💚 in Belagavi</span>
+  </div>
+</footer>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>Place Your Order</h2>
+    <p class="modal-sub">Fill in the details — we'll confirm via WhatsApp</p>
+
+    <div class="modal-product-row">
+      <div class="modal-product-emoji" id="modalEmoji">🧊</div>
+      <div class="modal-product-info">
+        <h4 id="modalProductName">Cold Water</h4>
+        <span id="modalProductPrice">₹30 per bottle</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Your Full Name *</label>
+      <input type="text" id="custName" class="form-input" placeholder="e.g. Suresh Kumar" />
+    </div>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Phone / WhatsApp *</label>
+        <input type="tel" id="custPhone" class="form-input" placeholder="+91 98765 43210" />
+      </div>
+      <div class="form-group">
+        <label>Number of Bottles *</label>
+        <input type="number" id="custQty" class="form-input" value="1" min="1" max="50" oninput="updateTotal()" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Delivery Address *</label>
+      <input type="text" id="custAddress" class="form-input" placeholder="House No, Street, Area, Belagavi" />
+    </div>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Delivery Date *</label>
+        <input type="date" id="custDate" class="form-input" />
+      </div>
+      <div class="form-group">
+        <label>Time Slot *</label>
+        <select id="custTime" class="form-input">
+          <option value="">Select time slot</option>
+          <option>08:00 AM – 10:00 AM</option>
+          <option>10:00 AM – 12:00 PM</option>
+          <option>12:00 PM – 02:00 PM</option>
+          <option>02:00 PM – 04:00 PM</option>
+          <option>04:00 PM – 06:00 PM</option>
+          <option>06:00 PM – 08:00 PM</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="order-total-row">
+      <span>Order Total</span>
+      <strong id="modalTotal">₹30</strong>
+    </div>
+
+    <button class="btn-submit" onclick="submitOrder()">💬 Send Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Order sent via WhatsApp!</div>
+
+<!-- JAVASCRIPT -->
+<script>
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target))
+      navLinks.classList.remove('open');
+  });
+
+  // Product data
+  const products = {
+    cold:   { name: 'Cold Water',   emoji: '🧊', price: 30 },
+    normal: { name: 'Normal Water', emoji: '🫧', price: 20 }
+  };
+  let currentProduct = 'cold';
+
+  function openModal(type) {
+    currentProduct = type || 'cold';
+    const p = products[currentProduct];
+    document.getElementById('modalEmoji').textContent        = p.emoji;
+    document.getElementById('modalProductName').textContent  = p.name;
+    document.getElementById('modalProductPrice').textContent = `₹${p.price} per bottle`;
+    document.getElementById('custQty').value = 1;
+    document.getElementById('custDate').min  = new Date().toISOString().split('T')[0];
+    updateTotal();
+    document.getElementById('orderModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('orderModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function updateTotal() {
+    const qty   = parseInt(document.getElementById('custQty').value) || 1;
+    const price = products[currentProduct].price;
+    document.getElementById('modalTotal').textContent = `₹${qty * price}`;
+  }
+
+  function submitOrder() {
+    const name    = document.getElementById('custName').value.trim();
+    const phone   = document.getElementById('custPhone').value.trim();
+    const qty     = document.getElementById('custQty').value;
+    const address = document.getElementById('custAddress').value.trim();
+    const date    = document.getElementById('custDate').value;
+    const time    = document.getElementById('custTime').value;
+
+    if (!name || !phone || !address || !date || !time) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const p     = products[currentProduct];
+    const total = parseInt(qty) * p.price;
+
+    const msg = [
+      `🌊 *New Order — Mulla Water Filter*`,
+      ``,
+      `👤 *Customer:* ${name}`,
+      `📞 *Phone:* ${phone}`,
+      `💧 *Product:* ${p.emoji} ${p.name}`,
+      `📦 *Quantity:* ${qty} bottle(s)`,
+      `💰 *Total:* ₹${total}`,
+      `📅 *Date:* ${date}`,
+      `🕐 *Time:* ${time}`,
+      `📍 *Address:* ${address}`,
+      ``,
+      `Payment: Cash on Delivery`
+    ].join('\n');
+
+    // ← Update this to the real WhatsApp number (country code + number, no spaces or +)
+    const ownerPhone = '919876543210';
+    window.open(`https://wa.me/${ownerPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    closeModal();
+    showToast('✅ Order sent via WhatsApp!');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const id = this.getAttribute('href');
+      if (id === '#') return;
+      const el = document.querySelector(id);
+      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
