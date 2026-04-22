@@ -1,8 +1,5 @@
-# 💧 Mulla Water Filter — Delivery & Service App
+# 💧 Water Filter — Delivery & Service App
 
-Islamic-themed water delivery web application built with Flask.
-
----
 
 ## 📁 Folder Structure
 
@@ -39,39 +36,8 @@ mulla_water/
 
 ---
 
-## 🚀 How to Run Locally
 
-### 1. Install Python dependencies
 
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Initialize the database
-
-```bash
-python init_db.py
-```
-
-### 3. Start the server
-
-```bash
-python app.py
-```
-
-Visit: **http://localhost:5000**
-
----
-
-## 🔐 Login Credentials
-
-| Role     | Email                      | Password   |
-|----------|---------------------------|------------|
-| Admin    | admin@mullawater.com      | admin123   |
-| Owner    | owner@mullawater.com      | owner123   |
-| Customer | Register on the site      | (your own) |
-
----
 
 ## 🌟 Feature Summary
 
@@ -115,17 +81,3 @@ The checkout form has `payment_method` field and the orders table has `payment_s
 3. Add a webhook route `/payment/webhook` to update `payment_status`
 4. Update the checkout template with the payment SDK
 
----
-
-## 🛡️ Security Notes for Production
-
-- Change `app.secret_key` to a long random string
-- Set `debug=False` in `app.py`
-- Use environment variables for secrets
-- Add HTTPS via a reverse proxy (nginx + certbot)
-- Consider PostgreSQL instead of SQLite for production
-
----
-
-*بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ*  
-*In the name of Allah, the Most Gracious, the Most Merciful*
